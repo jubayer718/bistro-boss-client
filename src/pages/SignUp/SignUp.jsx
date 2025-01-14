@@ -3,9 +3,12 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../Hooks/useAuth';
 import Swal from 'sweetalert2';
+import userAxiosPublic from '../../Hooks/userAxiosPublic';
+import Social from '../../components/social/Social';
 
 const SignUp = () => {
   const { createUser, updateUserProfile } = useAuth();
+  const axiosPublic = userAxiosPublic();
   const navigate = useNavigate()
   const {
     register,
@@ -19,13 +22,24 @@ const SignUp = () => {
     console.log(data)
     createUser(data?.email, data?.password)
       .then(result => {
-        console.log(result.user);
+        // console.log(result.user);
 
         updateUserProfile(data?.name, data?.photoURL)
           .then(() => {
-            Swal.fire('signup successful!!!')
-            reset()
-            navigate('/')
+            // create user entry in the database
+            const userInfo = {
+              name: data.name,
+              email: data.email
+            }
+            axiosPublic.post('/users', userInfo)
+              .then(res => {
+                if (res.data.insertedId) {
+                  reset()
+                  Swal.fire('signup successful!!!')
+                  navigate('/')
+                }
+              })
+
           })
       })
 
@@ -99,6 +113,7 @@ const SignUp = () => {
             </div>
           </form>
           <p className='text-center my-2'><small>already have account go to </small><Link className='font-bold' to='/login'>Login</Link></p>
+          <Social></Social>
         </div>
       </div>
     </div>

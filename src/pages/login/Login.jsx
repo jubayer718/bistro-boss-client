@@ -4,6 +4,7 @@ import useAuth from '../../Hooks/useAuth';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { use } from 'react';
+import Social from '../../components/social/Social';
 
 const Login = () => {
   const { signIn,updateUserProfile} = useAuth();
@@ -94,7 +95,8 @@ const Login = () => {
           </form>
           <p className='text-center mb-3'><small>New here?</small><Link
             className='text-red-500 font-bold'
-          to='/signUp'>Create a new Account</Link></p>
+            to='/signUp'>Create a new Account</Link></p>
+          <Social></Social>
     </div>
   </div>
 </div>
